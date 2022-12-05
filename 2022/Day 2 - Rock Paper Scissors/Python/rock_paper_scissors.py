@@ -41,14 +41,12 @@ class RockPaperScissorsChallenge2:
         self.right_score += self._enum[actual_matchup[1]]
         if actual_matchup in self.win:
             self.left_score += 6
-            self.right_score += 0
             return 1
         if actual_matchup in self.tie:
             self.left_score += 3
             self.right_score += 3
             return 0
         else:
-            self.left_score += 0
             self.right_score += 6
             return -1 
 
