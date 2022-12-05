@@ -1,3 +1,5 @@
+import re
+
 class CrateMover9000(object):
     def __init__(self, board:list, moves:list):
         self.board=board
@@ -36,19 +38,26 @@ class CrateMover9001(object):
         for move in self.moves:
             count, fro, to = self.parse_move(move)
             self.move(count, fro, to) 
-        
+
+def parseBoardItem(s):
+    try:
+        return re.search(r'\w+', s).group()
+    except Exception as e:
+        return None
+
+def processBoard():
+    board = [[] for _ in range(9)]
+    with open("../Input/day5_input.txt") as o:
+        for i, line in enumerate(o):
+            if i < 8:
+                for j in range(9):
+                    x = parseBoardItem(line[j*4:(j+1)*4])
+                    if x:
+                        board[j].insert(0, x)
+    return board
+
 def challenge1():
-    board = [
-        ['F', 'C', 'P', 'G', 'Q', 'R'],
-        ['W', 'T', 'C', 'P'],
-        ['B', 'H', 'P', 'M', 'C'],
-        ['L', 'T', 'Q', 'S', 'M', 'P', 'R'],
-        ['P', 'H', 'J', 'Z', 'V', 'G', 'N'],
-        ['D', 'P', 'J'],
-        ['L', 'G', 'P', 'Z', 'F', 'J', 'T', 'R'],
-        ['N', 'L', 'H', 'C', 'F', 'P', 'T', 'J'],
-        ['G', 'V', 'Z', 'Q', 'H', 'T', 'C', 'W']
-    ]
+    board = processBoard()
     moves = []
     with open("../Input/day5_input.txt") as o:
         for i, line in enumerate(o):
@@ -63,17 +72,7 @@ def challenge1():
         print(l.pop(), end="")
     
 def challenge2():
-    board = [
-        ['F', 'C', 'P', 'G', 'Q', 'R'],
-        ['W', 'T', 'C', 'P'],
-        ['B', 'H', 'P', 'M', 'C'],
-        ['L', 'T', 'Q', 'S', 'M', 'P', 'R'],
-        ['P', 'H', 'J', 'Z', 'V', 'G', 'N'],
-        ['D', 'P', 'J'],
-        ['L', 'G', 'P', 'Z', 'F', 'J', 'T', 'R'],
-        ['N', 'L', 'H', 'C', 'F', 'P', 'T', 'J'],
-        ['G', 'V', 'Z', 'Q', 'H', 'T', 'C', 'W']
-    ]
+    board = processBoard()
     moves = []
     with open("../Input/day5_input.txt") as o:
         for i, line in enumerate(o):
@@ -81,7 +80,6 @@ def challenge2():
                 continue
             else:
                 moves.append(line.strip())
-
     cm = CrateMover9001(board, moves)
     cm.simulate_moves()
     for l in cm.board:
